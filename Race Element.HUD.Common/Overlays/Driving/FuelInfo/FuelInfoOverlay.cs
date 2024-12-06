@@ -19,7 +19,7 @@ namespace RaceElement.HUD.Common.Overlays.OverlayFuelInfo;
     Version = 1.00,
     OverlayType = OverlayType.Drive,
     OverlayCategory = OverlayCategory.Car,
-    Game = Game.iRacing | Game.AssettoCorsa1,
+    Game = Game.iRacing | Game.AssettoCorsa1 | Game.Automobilista2,
     Authors = ["Kris Vickers", "Reinier Klarenberg", "Dirk Wolf"]
 )]
 internal sealed class FuelInfoOverlay : CommonAbstractOverlay
