@@ -149,21 +149,22 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
 
     public override void Render(Graphics g)
     {
+        Calculate();
         
         _fuelLastLapHeader.Draw(g, "Last Lap", this.Scale);
-        _fuelLastLapValue.Draw(g, "1:23.456", this.Scale);
+        _fuelLastLapValue.Draw(g, $"{_fuelLastLap.ToString("F2")}L", this.Scale);
         
         _fuelAvgLapHeader.Draw(g, "Avg Lap", this.Scale);
-        _fuelAvgLapValue.Draw(g, "1:23.456", this.Scale);
+        _fuelAvgLapValue.Draw(g, $"{_fuelAvgLap.ToString("F2")}L", this.Scale);
         
         _fuelRemainingHeader.Draw(g, "Remaining", this.Scale);
-        _fuelRemainingValue.Draw(g, "10.0 L", this.Scale);
+        _fuelRemainingValue.Draw(g, $"{_fuelRemaining.ToString("F2")}L", this.Scale);
         
         _fuelToFinishHeader.Draw(g, "To Finish", this.Scale);
-        _fuelToFinishValue.Draw(g, "10.0 L", this.Scale);
+        _fuelToFinishValue.Draw(g, $"{_fuelToFinish.ToString("F2")}L", this.Scale);
         
         _fuelLapsRemainingHeader.Draw(g, "Laps in Tank", this.Scale);
-        _fuelLapsRemainingValue.Draw(g, "10", this.Scale);
+        _fuelLapsRemainingValue.Draw(g, $"{_fuelLapsRemaining.ToString("F2")}", this.Scale);
     }
     
     public override void BeforeStop()
