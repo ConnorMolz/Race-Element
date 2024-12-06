@@ -70,9 +70,12 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
     private float _fuelAvgLap;
     private float _fuelRemaining;
     private float _fuelToFinish;
-    private int _fuelLapsRemaining;
+    private float _fuelLapsRemaining;
 
     private float _bestLap;
+
+    private int _currentlap = -1;
+    private float _bufferdFuel;
    
     
     // Before render function to setup the window and size
@@ -179,4 +182,31 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
         _fuelLapsRemainingValue.Dispose();
         
     }
+
+    private void Calculate()
+    {
+        // Data form game which need no calculation
+        _bestLap = SimDataProvider.LocalCar.Timing.LapTimeBestMs;
+        _fuelRemaining = SimDataProvider.LocalCar.Engine.FuelLiters;
+        _fuelAvgLap = SimDataProvider.LocalCar.Engine.FuelLitersXLap;
+        _fuelLapsRemaining = SimDataProvider.LocalCar.Engine.FuelEstimatedLaps;
+        
+        // Calculate the fuel used in the last lap
+        if(_currentlap != SimDataProvider.LocalCar.Race.LapsDriven)
+        {
+            _fuelLastLap = _bufferdFuel - _fuelRemaining;
+            _bufferdFuel = _fuelRemaining;
+            _currentlap = SimDataProvider.LocalCar.Race.LapsDriven;
+        }
+        
+        // Calculate the fuel to finish
+        double remainingLaps = SimDataProvider.Session.SessionTimeLeftSecs / _bestLap;
+        _fuelToFinish = Convert.ToSingle(remainingLaps * _fuelAvgLap + _config.InfoPanel.BufferLaps * _fuelAvgLap);
+        if (_config.InfoPanel.FormationLap)
+        {
+            _fuelToFinish += _fuelAvgLap;
+        }
+
+    }
+    
 }
