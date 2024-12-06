@@ -193,11 +193,11 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
         _fuelLapsRemaining = SimDataProvider.LocalCar.Engine.FuelEstimatedLaps;
         
         // Calculate the fuel used in the last lap
-        if(_currentlap != SimDataProvider.LocalCar.Race.LapsDriven)
+        if(_currentlap != SimDataProvider.Session.Cars[SimDataProvider.Session.PlayerCarIndex].Value.Laps)
         {
             _fuelLastLap = _bufferdFuel - _fuelRemaining;
             _bufferdFuel = _fuelRemaining;
-            _currentlap = SimDataProvider.LocalCar.Race.LapsDriven;
+            _currentlap = SimDataProvider.Session.Cars[SimDataProvider.Session.PlayerCarIndex].Value.Laps;
         }
         
         // Calculate the fuel to finish
