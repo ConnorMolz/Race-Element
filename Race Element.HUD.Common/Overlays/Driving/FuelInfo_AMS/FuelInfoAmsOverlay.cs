@@ -86,8 +86,8 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
 
         int lineHeight = _font.Height;
 
-        int unscaledHeaderWidth = 130;
-        int unscaledValueWidth = 100;
+        int unscaledHeaderWidth = 120;
+        int unscaledValueWidth = 80;
 
         int headerWidth = (int)(unscaledHeaderWidth * this.Scale);
         int valueWidth = (int)(unscaledValueWidth * this.Scale);
