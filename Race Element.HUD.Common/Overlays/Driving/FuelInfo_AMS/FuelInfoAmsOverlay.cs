@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using RaceElement.Data.Common;
+using RaceElement.Data.Common.SimulatorData;
 using RaceElement.Data.Games;
 using RaceElement.HUD.Overlay.Configuration;
 using RaceElement.HUD.Overlay.Internal;
@@ -134,12 +135,15 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
         _fuelRemainingValue = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
         headerRect.Offset(0, lineHeight);
         valueRect.Offset(0, lineHeight);
-        
-        _fuelToFinishHeader = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
-        _fuelToFinishValue = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
-        headerRect.Offset(0, lineHeight);
-        valueRect.Offset(0, lineHeight);
-        
+
+        if (SimDataProvider.Session.SessionType == RaceSessionType.Race)
+        {
+            _fuelToFinishHeader = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
+            _fuelToFinishValue = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
+            headerRect.Offset(0, lineHeight);
+            valueRect.Offset(0, lineHeight);
+        }
+
         _fuelLapsRemainingHeader = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
         _fuelLapsRemainingValue = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
         headerRect.Offset(0, lineHeight);
@@ -159,10 +163,13 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
         
         _fuelRemainingHeader.Draw(g, "Remaining", this.Scale);
         _fuelRemainingValue.Draw(g, $"{_fuelRemaining.ToString("F2")}L", this.Scale);
-        
-        _fuelToFinishHeader.Draw(g, "To Finish", this.Scale);
-        _fuelToFinishValue.Draw(g, $"{_fuelToFinish.ToString("F2")}L", this.Scale);
-        
+
+        if (SimDataProvider.Session.SessionType == RaceSessionType.Race)
+        {
+            _fuelToFinishHeader.Draw(g, "To Finish", this.Scale);
+            _fuelToFinishValue.Draw(g, $"{_fuelToFinish.ToString("F2")}L", this.Scale);
+        }
+
         _fuelLapsRemainingHeader.Draw(g, "Laps in Tank", this.Scale);
         _fuelLapsRemainingValue.Draw(g, $"{_fuelLapsRemaining.ToString("F2")}", this.Scale);
     }
@@ -199,13 +206,16 @@ public class FuelInfoAmsOverlay: CommonAbstractOverlay
             _bufferdFuel = _fuelRemaining;
             _currentlap = SimDataProvider.Session.Cars[SimDataProvider.Session.PlayerCarIndex].Value.Laps;
         }
-        
-        // Calculate the fuel to finish
-        double remainingLaps = SimDataProvider.Session.SessionTimeLeftSecs / _bestLap;
-        _fuelToFinish = Convert.ToSingle(remainingLaps * _fuelAvgLap + _config.InfoPanel.BufferLaps * _fuelAvgLap);
-        if (_config.InfoPanel.FormationLap)
+
+        if (SimDataProvider.Session.SessionType == RaceSessionType.Race)
         {
-            _fuelToFinish += _fuelAvgLap;
+            // Calculate the fuel to finish
+            double remainingLaps = SimDataProvider.Session.SessionTimeLeftSecs / _bestLap;
+            _fuelToFinish = Convert.ToSingle(remainingLaps * _fuelAvgLap + _config.InfoPanel.BufferLaps * _fuelAvgLap);
+            if (_config.InfoPanel.FormationLap)
+            {
+                _fuelToFinish += _fuelAvgLap;
+            }
         }
 
     }
