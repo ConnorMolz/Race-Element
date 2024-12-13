@@ -8,6 +8,7 @@ using RaceElement.HUD.Overlay.Util;
 using System.Collections.Concurrent;
 using RaceElement.Data.Common;
 using RaceElement.Data.Common.SimulatorData;
+using RaceElement.Data.Games;
 using RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.API;
 using RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.Jobs;
 
@@ -18,6 +19,7 @@ namespace RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport;
     Version = 1.10,
     OverlayType = OverlayType.Drive,
     OverlayCategory = OverlayCategory.All,
+    Game = Game.Automobilista2,
     Authors = ["Andrei Jianu"]
 )]
 
