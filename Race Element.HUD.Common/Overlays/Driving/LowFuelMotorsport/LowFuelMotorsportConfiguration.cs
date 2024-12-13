@@ -1,6 +1,6 @@
 using RaceElement.HUD.Overlay.Configuration;
 
-namespace RaceElement.HUD.ACC.Overlays.Pitwall.LowFuelMotorsport;
+namespace RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport;
 
 internal sealed class LowFuelMotorsportConfiguration : OverlayConfiguration
 {

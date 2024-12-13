@@ -1,9 +1,8 @@
-﻿using System;
-using System.Speech.Synthesis;
+﻿using System.Speech.Synthesis;
 using RaceElement.Core.Jobs;
 using RaceElement.Core.Jobs.Timer;
 
-namespace RaceElement.HUD.ACC.Overlays.Pitwall.LowFuelMotorsport;
+namespace RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.Jobs;
 
 internal sealed class LowFuelMotorsportSpeechSynthesizer(DateTime RaceStartTimeUtc, LowFuelMotorsportOverlay LfmOverlay) : IJob
 {

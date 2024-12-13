@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
-namespace RaceElement.HUD.ACC.Overlays.Pitwall.LowFuelMotorsport.API;
+namespace RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.API;
 
 internal readonly record struct ApiObject
 {

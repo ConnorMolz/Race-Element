@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.API;
 
-namespace RaceElement.HUD.ACC.Overlays.Pitwall.LowFuelMotorsport.API;
+namespace RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.Jobs;
 
 internal sealed class LowFuelMotorsportElo
 {

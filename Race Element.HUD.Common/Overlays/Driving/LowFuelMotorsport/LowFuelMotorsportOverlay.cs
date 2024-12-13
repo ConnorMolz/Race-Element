@@ -2,45 +2,43 @@ using RaceElement.HUD.Overlay.OverlayUtil;
 using RaceElement.HUD.Overlay.Internal;
 using System.Drawing.Text;
 using System.Drawing;
-using System;
 using System.Windows.Forms;
-using RaceElement.Core.Jobs;
 using RaceElement.Core.Jobs.Timer;
-using static RaceElement.HUD.ACC.Overlays.Pitwall.LowFuelMotorsport.LowFuelMotorsportConfiguration;
 using RaceElement.HUD.Overlay.Util;
-using RaceElement.HUD.ACC.Overlays.Pitwall.LowFuelMotorsport.API;
-using System.Collections.Generic;
-using System.Linq;
 using System.Collections.Concurrent;
+using RaceElement.Data.Common;
+using RaceElement.Data.Common.SimulatorData;
+using RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.API;
+using RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport.Jobs;
 
-namespace RaceElement.HUD.ACC.Overlays.Pitwall.LowFuelMotorsport;
+namespace RaceElement.HUD.Common.Overlays.Driving.LowFuelMotorsport;
 
 [Overlay(Name = "Low Fuel Motorsport",
-    Description = "Shows driver license and next upcoming races.",
+    Description = "Shows driver license, next upcoming races and ELO gain/loss during the race.",
+    Version = 1.10,
     OverlayType = OverlayType.Drive,
+    OverlayCategory = OverlayCategory.All,
     Authors = ["Andrei Jianu"]
 )]
 
-internal sealed class LowFuelMotorsportOverlay : AbstractOverlay
+internal sealed class LowFuelMotorsportOverlay : CommonAbstractOverlay
 {
     private readonly LowFuelMotorsportConfiguration _config = new();
-
-    private Font _fontFamily;
 
     private ApiObject _apiObject;
     private LowFuelMotorsportElo _elo;
     private LowFuelMotorsportJob _lfmJob;
 
     internal readonly ConcurrentBag<Guid> _speechJobIds = [];
-
     private SizeF _previousTextBounds = Size.Empty;
+    private Font _fontFamily;
 
     public LowFuelMotorsportOverlay(Rectangle rectangle) : base(rectangle, "Low Fuel Motorsport")
     {
         this.RefreshRateHz = 2f;
     }
 
-    public sealed override void SetupPreviewData()
+    public override void SetupPreviewData()
     {
         _apiObject = new()
         {
@@ -69,14 +67,14 @@ internal sealed class LowFuelMotorsportOverlay : AbstractOverlay
         };
     }
 
-    public sealed override void BeforeStart()
+    public override void BeforeStart()
     {
         _fontFamily = _config.Font.FontFamily switch
         {
-            FontFamilyConfig.SegoeMono => FontUtil.FontSegoeMono(_config.Font.Size),
-            FontFamilyConfig.Conthrax => FontUtil.FontConthrax(_config.Font.Size),
-            FontFamilyConfig.Orbitron => FontUtil.FontOrbitron(_config.Font.Size),
-            FontFamilyConfig.Roboto => FontUtil.FontRoboto(_config.Font.Size),
+            LowFuelMotorsportConfiguration.FontFamilyConfig.SegoeMono => FontUtil.FontSegoeMono(_config.Font.Size),
+            LowFuelMotorsportConfiguration.FontFamilyConfig.Conthrax => FontUtil.FontConthrax(_config.Font.Size),
+            LowFuelMotorsportConfiguration.FontFamilyConfig.Orbitron => FontUtil.FontOrbitron(_config.Font.Size),
+            LowFuelMotorsportConfiguration.FontFamilyConfig.Roboto => FontUtil.FontRoboto(_config.Font.Size),
             _ => FontUtil.FontSegoeMono(_config.Font.Size)
         };
 
@@ -102,7 +100,7 @@ internal sealed class LowFuelMotorsportOverlay : AbstractOverlay
     private void OnNewApiObject(object sender, ApiObject apiObject) => _apiObject = apiObject;
     private void OnNewSplitInfo(object sender, RaceInfo raceInfo) => _elo = new(raceInfo);
 
-    public sealed override void BeforeStop()
+    public override void BeforeStop()
     {
         foreach (Guid jobId in _speechJobIds)
             JobTimerExecutor.Instance().Remove(jobId);
@@ -121,7 +119,7 @@ internal sealed class LowFuelMotorsportOverlay : AbstractOverlay
         return _config.Others.ShowAlways || base.ShouldRender();
     }
 
-    public sealed override void Render(Graphics g)
+    public override void Render(Graphics g)
     {
         string licenseText = GenerateLicense();
 
@@ -217,9 +215,10 @@ internal sealed class LowFuelMotorsportOverlay : AbstractOverlay
                     int carNumber = _elo.GetCarNumber();
                     int threshold = _elo.GetPositionThreshold();
 
-                    if (pageGraphics.SessionType == ACCSharedMemory.AcSessionType.AC_RACE)
+                    if (SimDataProvider.Session.SessionType == RaceSessionType.Race)
                     {
-                        elo = _elo.GetElo(pageGraphics.Position).ToString();
+                        var pos = SimDataProvider.LocalCar.Race.ClassPosition;
+                        elo = _elo.GetElo(pos).ToString();
                     }
 
                     time = string.Format("Car: {0}  Threshold: {1}  Elo: {2}   {3}", carNumber, threshold, elo, time);
