@@ -19,7 +19,7 @@ internal sealed class AssettoCorsa1DataProvider : AbstractSimDataProvider
     static string dummyCarClass = "Race";
     List<string> classes = [dummyCarClass];
 
-    internal override int PollingRate() => 100;
+    internal override int PollingRate() => 200;
 
     private static string GameName { get => Game.AssettoCorsa1.ToShortName(); }
 
@@ -58,7 +58,7 @@ internal sealed class AssettoCorsa1DataProvider : AbstractSimDataProvider
 
     private void MapEntryList(PageFileCrewChief crewChiefPage, PageFileGraphics graphicsPage)
     {
-        for (int i = 0; i < crewChiefPage.NumVehicles; i++)
+        for (int i = 0; i < crewChiefPage.Vehicle.Length; i++)
         {
             AcsVehicleInfo vehicle = crewChiefPage.Vehicle[i];
             CarInfo carInfo = new CarInfo(i);
