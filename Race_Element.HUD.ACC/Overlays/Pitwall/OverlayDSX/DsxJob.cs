@@ -1,10 +1,10 @@
 ﻿using RaceElement.Core.Jobs.Loop;
 using System;
-using static RaceElement.HUD.ACC.Overlays.Pitwall.OverlayDualSenseX.DualSenseXResources;
+using static RaceElement.HUD.ACC.Overlays.Pitwall.Dsx.DsxResources;
 
-namespace RaceElement.HUD.ACC.Overlays.Pitwall.OverlayDualSenseX;
+namespace RaceElement.HUD.ACC.Overlays.Pitwall.Dsx;
 
-internal sealed class DualSenseXJob(DualSenseXOverlay overlay) : AbstractLoopJob
+internal sealed class DsxJob(DsxOverlay overlay) : AbstractLoopJob
 {
     public sealed override void RunAction()
     {

@@ -6,6 +6,16 @@ public static class ReleaseNotes
 {
     internal static readonly Dictionary<string, string> Notes = new()
     {
+        {"2.2.2.6", "Race Element:"+
+                    "\n- HUD Tab: Fixed link buttons and updated all links regarding twitch chat access tokens, the old one is discontinued. Reset the configuration for those HUDs if you encounter problems with the link buttons."+
+                    "\n- DualSenseX HUDs are renamed to DSX, you might have to copy over the settings from a previous version of Race Element."+
+                    "\n\nAssetto Corsa:"+
+                    "\n- DSX HUD: Added customizable trigger FFB based on wheel slip."+
+                    "\n\nAssetto Corsa Competizione:"+
+                    "\n- Track Map HUD: Added filled background with color and opacity option."+
+                    "\n\nAutomobilista 2:"+
+                    "\n- Added Low Fuel Motorsport HUD. (Just like the one for ACC)."
+                    },
         {"2.2.2.4", "Race Element:"+
                     "\n- When started, automatically scans for any running simulator and switches automatically to that simulator."+
                     "\n\nAssetto Corsa Competizione:"+

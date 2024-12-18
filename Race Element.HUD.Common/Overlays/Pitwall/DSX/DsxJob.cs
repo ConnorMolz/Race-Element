@@ -1,10 +1,11 @@
 ﻿using RaceElement.Core.Jobs.Loop;
+using RaceElement.Data.Common;
 using System;
-using static RaceElement.HUD.Common.Overlays.Pitwall.DualSenseX.DualSenseXResources;
+using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.DsxResources;
 
-namespace RaceElement.HUD.Common.Overlays.Pitwall.DualSenseX;
+namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
-internal sealed class DualSenseXJob(DualSenseXOverlay overlay) : AbstractLoopJob
+internal sealed class DsxJob(DsxOverlay overlay) : AbstractLoopJob
 {
     public sealed override void RunAction()
     {
@@ -24,7 +25,7 @@ internal sealed class DualSenseXJob(DualSenseXOverlay overlay) : AbstractLoopJob
             }
         }
 
-        Packet tcPacket = TriggerHaptics.HandleAcceleration(overlay._config.ThrottleHaptics);
+        Packet tcPacket = TriggerHaptics.HandleAcceleration(overlay._config, overlay.GameWhenStarted);
         if (tcPacket != null)
         {
             overlay.Send(tcPacket);
@@ -32,7 +33,7 @@ internal sealed class DualSenseXJob(DualSenseXOverlay overlay) : AbstractLoopJob
             //HandleResponse(response);
         }
 
-        Packet absPacket = TriggerHaptics.HandleBraking(overlay._config.BrakeHaptics);
+        Packet absPacket = TriggerHaptics.HandleBraking(overlay._config, overlay.GameWhenStarted);
         if (absPacket != null)
         {
             overlay.Send(absPacket);

@@ -16,7 +16,6 @@ internal static class Ams2Mapper
         session.Weather.AirTemperature = shared.mAmbientTemperature;
         session.Weather.AirVelocity = shared.mWindSpeed * 3.6f;
 
-
         // Track
         session.Track.Length = (int)(shared.mTrackLength + 0.5f);
         session.Track.Temperature = shared.mTrackTemperature;
@@ -79,7 +78,6 @@ internal static class Ams2Mapper
 
         // Flag Mapper
         session.CurrentFlag = ToFlag((Constants.RaceFlags)shared.mHighestFlagColour);
-
     }
 
     public static void ToLocalCar(Shared shared, LocalCarData local)
@@ -114,7 +112,7 @@ internal static class Ams2Mapper
         {
             local.Electronics.TractionControlActivation = 0;
         }
-        
+
         local.Electronics.BrakeBias = 1 - shared.mBrakeBias;
 
         local.Electronics.AbsActivation = shared.mAntiLockActive ? 1.0f : 0.0f;
