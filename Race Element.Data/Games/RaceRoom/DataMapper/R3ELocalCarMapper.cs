@@ -86,6 +86,10 @@ internal static partial class R3ELocalCarMapper
     private static float CalculateSlipRatio(float tyreVelocity, float carVelocity)
     {
         if (carVelocity < 1) return 0;
-        return (tyreVelocity - carVelocity) / tyreVelocity * 10;
+        float ratio = (tyreVelocity - carVelocity) / tyreVelocity * 10;
+
+        if (ratio < 0) ratio *= -1;
+
+        return ratio;
     }
 }
