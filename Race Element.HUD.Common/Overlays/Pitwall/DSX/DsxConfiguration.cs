@@ -64,7 +64,7 @@ internal sealed class DsxConfiguration : OverlayConfiguration
         public float FrontSlipTreshold { get; init; } = 0.6f;
 
         [ToolTip("Decrease this treshold to increase the sensitivity when the rear wheels slip (oversteer).")]
-        [FloatRange(0.05f, 6f, 0.01f, 2)]
+        [FloatRange(0.05f, 10f, 0.01f, 2)]
         public float RearSlipTreshold { get; init; } = 0.5f;
     }
 }
