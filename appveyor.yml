@@ -3,7 +3,6 @@ branches:
   only:
     - dev
     - release
-    - track-map
   except:
     - gh-pages
     - pages
