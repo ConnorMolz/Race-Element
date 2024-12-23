@@ -36,18 +36,17 @@ public sealed class StartScreenOverlay : AbstractOverlay
         this.Y = rectangle.Y;
         this.Width = 620;
         this.Height = 74;
-        this.RefreshRateHz = 80;
+        this.RefreshRateHz = 60;
         this.SubscribeToACCData = false;
     }
 
     public override void BeforeStart()
     {
-
-        Rectangle rectangle = new(1, 0, Width - 2, Height - 1);
-        _clippingPath = GraphicsExtensions.CreateRoundedRectangle(rectangle, 8, 8, 8, 8);
+        _clippingPath = GraphicsExtensions.CreateRoundedRectangle(new(1, 0, Width - 2, Height - 1), 8, 8, 8, 8);
 
         _cachedBackground = new CachedBitmap(this.Width, this.Height, g =>
         {
+            g.CompositingMode = CompositingMode.SourceCopy;
             Rectangle rectangle = new(0, 0, Width - 1, Height - 1);
             using HatchBrush hatchBrush = new(HatchStyle.LightUpwardDiagonal, Color.FromArgb(255, Color.Black), Color.FromArgb(230, Color.Black));
             g.FillRoundedRectangle(hatchBrush, rectangle, 8);
@@ -103,7 +102,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
             // draw top horizontal line
             PointF topLeft = new(SliderWidth / 2 - width / 2, 0);
             PointF topRight = new(SliderWidth / 2 + width / 2, 0);
-            using SolidBrush topLineBrush = new(Color.FromArgb(70, 255, 0, 0));
+            using SolidBrush topLineBrush = new(Color.FromArgb(50, 255, 0, 0));
             using Pen topLinePen = new(topLineBrush, 2f);
             g.DrawLine(topLinePen, topLeft, topRight);
         }, opacity: 0);
