@@ -49,7 +49,16 @@ public sealed class StartScreenOverlay : AbstractOverlay
             g.CompositingMode = CompositingMode.SourceCopy;
             Rectangle rectangle = new(0, 0, Width - 1, Height - 1);
             using HatchBrush hatchBrush = new(HatchStyle.LightUpwardDiagonal, Color.FromArgb(255, Color.Black), Color.FromArgb(230, Color.Black));
+
             g.FillRoundedRectangle(hatchBrush, rectangle, 8);
+
+
+            int crimpAmount = -1;
+            Rectangle crimpRect = new(rectangle.X + crimpAmount, rectangle.Y + crimpAmount, rectangle.Width - crimpAmount * 2, rectangle.Height - crimpAmount * 2);
+
+            using SolidBrush additionalBrush = new(Color.FromArgb(50, Color.Red));
+            using Pen additionalPen = new(additionalBrush, 1.6f);
+            g.DrawLine(additionalPen, new(0, 0), new(Width, 0));
         }, opacity: 0);
 
         _cachedText = new CachedBitmap(this.Width, this.Height, g =>
@@ -98,11 +107,11 @@ public sealed class StartScreenOverlay : AbstractOverlay
                 g.DrawLine(pen, new Point(baseX, 0), new Point(baseX + SliderWidth / 2, Height));
             }
 
-            float width = 50f;
+            float width = 45f;
             // draw top horizontal line
             PointF topLeft = new(SliderWidth / 2 - width / 2, 0);
             PointF topRight = new(SliderWidth / 2 + width / 2, 0);
-            using SolidBrush topLineBrush = new(Color.FromArgb(50, 255, 0, 0));
+            using SolidBrush topLineBrush = new(Color.FromArgb(70, 255, 0, 0));
             using Pen topLinePen = new(topLineBrush, 2f);
             g.DrawLine(topLinePen, topLeft, topRight);
         }, opacity: 0);
