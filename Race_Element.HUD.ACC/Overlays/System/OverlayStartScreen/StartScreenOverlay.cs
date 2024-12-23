@@ -1,7 +1,6 @@
 ﻿using RaceElement.HUD.Overlay.Internal;
 using RaceElement.HUD.Overlay.OverlayUtil;
 using RaceElement.HUD.Overlay.Util;
-using ScottPlot.Plottable;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -21,6 +20,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
 {
     public string Version { get; init; } = "0.0.0.0";
 
+    private GraphicsPath _clippingPath;
     private CachedBitmap _cachedBackground;
     private CachedBitmap _cachedText;
     private CachedBitmap _slider;
@@ -42,6 +42,10 @@ public sealed class StartScreenOverlay : AbstractOverlay
 
     public override void BeforeStart()
     {
+
+        Rectangle rectangle = new(1, 0, Width - 2, Height - 1);
+        _clippingPath = GraphicsExtensions.CreateRoundedRectangle(rectangle, 8, 8, 8, 8);
+
         _cachedBackground = new CachedBitmap(this.Width, this.Height, g =>
         {
             Rectangle rectangle = new(0, 0, Width - 1, Height - 1);
@@ -104,6 +108,8 @@ public sealed class StartScreenOverlay : AbstractOverlay
 
     public override void BeforeStop()
     {
+        _clippingPath?.Dispose();
+
         _cachedBackground?.Dispose();
         _cachedText?.Dispose();
         _slider?.Dispose();
@@ -116,6 +122,8 @@ public sealed class StartScreenOverlay : AbstractOverlay
     {
         tweener?.Update(stopwatch.ElapsedMilliseconds / 1000f);
         g.SmoothingMode = SmoothingMode.HighQuality;
+
+        g.SetClip(_clippingPath);
 
         _cachedBackground?.Draw(g);
 
