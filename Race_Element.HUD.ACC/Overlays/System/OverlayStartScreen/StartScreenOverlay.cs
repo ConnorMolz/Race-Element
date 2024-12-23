@@ -89,6 +89,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
             pthGrBrush.SurroundColors = [Color.FromArgb(40, 255, 0, 0)];
             pthGrBrush.CenterColor = Color.FromArgb(255, 255, 0, 0);
 
+            // draw diagonal lines
             using Pen pen = new(pthGrBrush, 1.15f);
             int spacing = 8;
             int lines = (int)Math.Floor(SliderWidth / (double)spacing);
@@ -97,6 +98,14 @@ public sealed class StartScreenOverlay : AbstractOverlay
                 int baseX = -SliderWidth / 3 + i * spacing;
                 g.DrawLine(pen, new Point(baseX, 0), new Point(baseX + SliderWidth / 2, Height));
             }
+
+            float width = 50f;
+            // draw top horizontal line
+            PointF topLeft = new(SliderWidth / 2 - width / 2, 0);
+            PointF topRight = new(SliderWidth / 2 + width / 2, 0);
+            using SolidBrush topLineBrush = new(Color.FromArgb(70, 255, 0, 0));
+            using Pen topLinePen = new(topLineBrush, 2f);
+            g.DrawLine(topLinePen, topLeft, topRight);
         }, opacity: 0);
 
         tweener = new Tweener();
