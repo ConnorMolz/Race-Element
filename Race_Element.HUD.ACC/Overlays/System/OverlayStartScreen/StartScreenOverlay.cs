@@ -16,13 +16,14 @@ namespace RaceElement.HUD.ACC.Overlays.OverlayStartScreen;
  OverlayType = OverlayType.Pitwall)]
 public sealed class StartScreenOverlay : AbstractOverlay
 {
+    /// <summary>
+    /// Required to allow generic <see cref="OverlayConfiguration.GenericConfig"/>
+    /// </summary>
     private readonly StartScreenConfig _config = new();
     private sealed class StartScreenConfig : OverlayConfiguration
     {
-        public StartScreenConfig()
-        {
-            this.GenericConfiguration.AllowRescale = false;
-        }
+        public StartScreenConfig() => this.GenericConfiguration.AllowRescale = false;
+
     }
 
     private string Version = "0.0.0.0";
@@ -31,7 +32,6 @@ public sealed class StartScreenOverlay : AbstractOverlay
     private CachedBitmap _cachedBackground;
     private CachedBitmap _cachedText;
     private CachedBitmap _slider;
-    private Stopwatch stopwatch;
 
     private const int SliderWidth = 280;
     private const float SliderPixelSpeed = 9f;
@@ -144,11 +144,9 @@ public sealed class StartScreenOverlay : AbstractOverlay
     public override void BeforeStop()
     {
         _clippingPath?.Dispose();
-
         _cachedBackground?.Dispose();
         _cachedText?.Dispose();
         _slider?.Dispose();
-        stopwatch?.Stop();
     }
 
     public override bool ShouldRender() => true;
@@ -160,7 +158,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
         _cachedBackground?.Draw(g);
 
         if (sliderX > Width - SliderPixelSpeed)
-            sliderX = (int)(-SliderWidth + SliderPixelSpeed);
+            sliderX = (int)(-SliderWidth + SliderPixelSpeed + SliderWidth / 5);
         _slider?.Draw(g, new Point(sliderX, 0));
         sliderX += (int)SliderPixelSpeed;
 
