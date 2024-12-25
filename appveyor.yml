@@ -3,16 +3,11 @@ branches:
   only:
     - dev
     - release
-    - track-map
   except:
     - gh-pages
     - pages
 image: Visual Studio 2022
 configuration: Release
-install:
-- ps: |
-    Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-    & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '9.0.100' -InstallDir "$env:ProgramFiles\dotnet"
 build_script:
 - cmd: dotnet publish -p:PublishProfile=PublishProfile
 artifacts:

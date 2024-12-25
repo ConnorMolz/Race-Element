@@ -8,7 +8,7 @@ internal sealed class R3eSharedMemory
     public static SharedMemory.Shared Memory;
 
     private static MemoryMappedFile _file;
-    private static byte[] _buffer;
+    private static byte[]? _buffer;
 
 
     public static Shared ReadSharedMemory(bool fromCache = false)
@@ -26,9 +26,9 @@ internal sealed class R3eSharedMemory
 
         var _view = _file.CreateViewStream();
         BinaryReader _stream = new(_view);
-        _buffer = _stream.ReadBytes(Marshal.SizeOf(typeof(Shared)));
+        _buffer = _stream.ReadBytes(Marshal.SizeOf<Shared>());
         GCHandle _handle = GCHandle.Alloc(_buffer, GCHandleType.Pinned);
-        Memory = (Shared)Marshal.PtrToStructure(_handle.AddrOfPinnedObject(), typeof(Shared));
+        Memory = Marshal.PtrToStructure<Shared>(_handle.AddrOfPinnedObject());
         _handle.Free();
 
         return Memory;

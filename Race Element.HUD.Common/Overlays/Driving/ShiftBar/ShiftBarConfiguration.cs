@@ -17,7 +17,8 @@ internal sealed class ShiftBarConfiguration : OverlayConfiguration
         [IntRange(12, 50, 2)]
         public int Height { get; init; } = 24;
 
-        [IntRange(50, 200, 10, GameMaxs = [150], MaxGames = [Game.iRacing])]
+        [ToolTip("Don't go over your monitor's refresh rate, it's useless.\nSo lower it to 60 if you got a 60 hz monitor.")]
+        [IntRange(50, 240, 10, GameMaxs = [150], MaxGames = [Game.iRacing])]
         public int RefreshRate { get; init; } = 90;
     }
 
