@@ -40,7 +40,7 @@ public partial class App : Application
 
         var uiSettings = new UiSettings().Get();
         FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(System.Environment.ProcessPath);
-        _startScreenOverlay = new StartScreenOverlay(new System.Drawing.Rectangle(uiSettings.X, uiSettings.Y, 150, 150)) { Version = fileVersion.FileVersion };
+        _startScreenOverlay = new StartScreenOverlay(new System.Drawing.Rectangle(uiSettings.X, uiSettings.Y, 150, 150));
         _startScreenOverlay.Start(false);
 
         AccScheduler.RegisterJobs();

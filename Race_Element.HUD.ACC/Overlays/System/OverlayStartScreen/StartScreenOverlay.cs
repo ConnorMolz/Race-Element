@@ -1,4 +1,5 @@
-﻿using RaceElement.HUD.Overlay.Internal;
+﻿using RaceElement.HUD.Overlay.Configuration;
+using RaceElement.HUD.Overlay.Internal;
 using RaceElement.HUD.Overlay.OverlayUtil;
 using RaceElement.HUD.Overlay.Util;
 using System;
@@ -15,7 +16,16 @@ namespace RaceElement.HUD.ACC.Overlays.OverlayStartScreen;
  OverlayType = OverlayType.Pitwall)]
 public sealed class StartScreenOverlay : AbstractOverlay
 {
-    public string Version { get; init; } = "0.0.0.0";
+    private readonly StartScreenConfig _config = new();
+    private sealed class StartScreenConfig : OverlayConfiguration
+    {
+        public StartScreenConfig()
+        {
+            this.GenericConfiguration.AllowRescale = false;
+        }
+    }
+
+    private string Version = "0.0.0.0";
 
     private GraphicsPath _clippingPath;
     private CachedBitmap _cachedBackground;
@@ -24,12 +34,12 @@ public sealed class StartScreenOverlay : AbstractOverlay
     private Stopwatch stopwatch;
 
     private const int SliderWidth = 280;
-    private const float SliderMargin = 8f;
+    private const float SliderPixelSpeed = 9f;
     private int sliderX = -SliderWidth;
 
     public StartScreenOverlay(Rectangle rectangle) : base(rectangle, "Start Screen")
     {
-        if (rectangle.X != 0 || rectangle.Y != 0) // if there's no preset, lets not set it.
+        if (rectangle.Width > 0 && (rectangle.X != 0 || rectangle.Y != 0)) // if there's no preset, lets not set it.
         {
             this.X = rectangle.X;
             this.Y = rectangle.Y;
@@ -43,6 +53,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
 
     public override void BeforeStart()
     {
+        this.Version = FileVersionInfo.GetVersionInfo(Environment.ProcessPath).FileVersion;
 
         float rounding = 19f;
         int intRounding = (int)rounding;
@@ -51,8 +62,8 @@ public sealed class StartScreenOverlay : AbstractOverlay
         _cachedBackground = new CachedBitmap(this.Width, this.Height, g =>
         {
             Rectangle rectangle = new(0, 0, Width - 1, Height - 1);
-            using LinearGradientBrush solidBackgroundBrush = new(PointF.Empty, new PointF(Width, Height), Color.FromArgb(255, 0, 0, 0), Color.FromArgb(8, 255, 0, 0));
-            using HatchBrush hatchBrush = new(HatchStyle.LightUpwardDiagonal, Color.FromArgb(2, Color.Red), Color.FromArgb(230, Color.Black));
+            using LinearGradientBrush solidBackgroundBrush = new(PointF.Empty, new PointF(Width, Height), Color.FromArgb(255, 0, 0, 0), Color.FromArgb(170, 8, 0, 0));
+            using HatchBrush hatchBrush = new(HatchStyle.LightUpwardDiagonal, Color.FromArgb(3, Color.Red), Color.FromArgb(230, Color.Black));
             g.FillRoundedRectangle(solidBackgroundBrush, rectangle, intRounding);
             g.FillRoundedRectangle(hatchBrush, rectangle, intRounding);
 
@@ -75,13 +86,14 @@ public sealed class StartScreenOverlay : AbstractOverlay
             g.Transform = transform;
 
             string header = $"Race Element {Version}";
-            Font font16 = FontUtil.FontConthrax(32);
+            using Font font16 = FontUtil.FontConthrax(32);
             int font16Height = (int)font16.GetHeight(g);
             int halfStringLength = (int)(g.MeasureString(header, font16).Width / 2);
             int x = this.Width / 2 - halfStringLength - 1;
 
-            g.DrawStringWithShadow(header, font16, Color.FromArgb(170, Color.Red), new PointF(x + 2.7f, 2.3f), 7f, new StringFormat() { LineAlignment = StringAlignment.Near });
-            g.DrawStringWithShadow(header, font16, Color.FromArgb(215, Color.White), new Point(x, 0), 5f, new StringFormat() { LineAlignment = StringAlignment.Near });
+            g.DrawStringWithShadow(header, font16, Color.FromArgb(170, Color.Black), new PointF(x + 6.2f, 6.6f), 7f, new StringFormat() { LineAlignment = StringAlignment.Near });
+            g.DrawStringWithShadow(header, font16, Color.FromArgb(170, Color.Red), new PointF(x + 2.7f, 3.7f), 7f, new StringFormat() { LineAlignment = StringAlignment.Near });
+            g.DrawStringWithShadow(header, font16, Color.FromArgb(215, Color.White), new Point(x, 2), 5f, new StringFormat() { LineAlignment = StringAlignment.Near });
 
             font16.Dispose();
 
@@ -89,9 +101,9 @@ public sealed class StartScreenOverlay : AbstractOverlay
             transform.Translate(-12f, -3f);
             g.Transform = transform;
             string subHeader = $"Solutions for Simulators © 2022 - {DateTime.UtcNow.Year} Reinier Klarenberg";
-            Font font11 = FontUtil.FontConthrax(11);
-            g.DrawStringWithShadow(subHeader, font11, Color.FromArgb(185, Color.Red), new PointF(x + 9f, font16Height + 1));
-            g.DrawStringWithShadow(subHeader, font11, Color.FromArgb(185, Color.White), new PointF(x + 8f, font16Height));
+            using Font font11 = FontUtil.FontConthrax(11.2f);
+            g.DrawStringWithShadow(subHeader, font11, Color.FromArgb(185, Color.Red), new PointF(x + 8f, font16Height + 0.5f));
+            g.DrawStringWithShadow(subHeader, font11, Color.FromArgb(185, Color.White), new PointF(x + 7f, font16Height));
             font11.Dispose();
         }, opacity: 1);
 
@@ -147,10 +159,10 @@ public sealed class StartScreenOverlay : AbstractOverlay
 
         _cachedBackground?.Draw(g);
 
-        if (sliderX > Width - SliderMargin)
-            sliderX = -SliderWidth;
+        if (sliderX > Width - SliderPixelSpeed)
+            sliderX = (int)(-SliderWidth + SliderPixelSpeed);
         _slider?.Draw(g, new Point(sliderX, 0));
-        sliderX += 16;
+        sliderX += (int)SliderPixelSpeed;
 
         _cachedText?.Draw(g);
     }
