@@ -6,8 +6,11 @@ public static class ReleaseNotes
 {
     internal static readonly Dictionary<string, string> Notes = new()
     {
-        {"2.2.2.8", "RaceRoom:"+
-                    "\n- DSX HUD: Switched to slip ratio ffb instead of tc/abs activation ffb."
+        {"2.2.3.0", "Race Element:"+
+                    "\n- Updated Start Screen HUD."+
+                    "\n- ACC and Multi-Sim shift bars can now render up to 240 Hz."+
+                    "\n\nRaceRoom:"+
+                    "\n- DSX: Switched to slip ratio ffb instead of tc/abs activation ffb."
                     },
         {"2.2.2.6", "Race Element:"+
                     "\n- HUD Tab: Fixed link buttons and updated all links regarding twitch chat access tokens, the old one is discontinued. Reset the configuration for those HUDs if you encounter problems with the link buttons."+
