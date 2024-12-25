@@ -45,8 +45,8 @@ public sealed class StartScreenOverlay : AbstractOverlay
             this.Y = rectangle.Y;
         }
 
-        this.Width = 620;
-        this.Height = 74;
+        this.Width = 610;
+        this.Height = 72;
         this.RefreshRateHz = 60;
         this.SubscribeToACCData = false;
     }
@@ -89,7 +89,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
             using Font font16 = FontUtil.FontConthrax(32);
             int font16Height = (int)font16.GetHeight(g);
             int halfStringLength = (int)(g.MeasureString(header, font16).Width / 2);
-            int x = this.Width / 2 - halfStringLength - 1;
+            int x = this.Width / 2 - halfStringLength;
 
             g.DrawStringWithShadow(header, font16, Color.FromArgb(170, Color.Black), new PointF(x + 6.2f, 6.6f), 7f, new StringFormat() { LineAlignment = StringAlignment.Near });
             g.DrawStringWithShadow(header, font16, Color.FromArgb(170, Color.Red), new PointF(x + 2.7f, 3.7f), 7f, new StringFormat() { LineAlignment = StringAlignment.Near });
@@ -101,7 +101,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
             transform.Translate(-12f, -3f);
             g.Transform = transform;
             string subHeader = $"Solutions for Simulators © 2022 - {DateTime.UtcNow.Year} Reinier Klarenberg";
-            using Font font11 = FontUtil.FontConthrax(11.2f);
+            using Font font11 = FontUtil.FontConthrax(10.8f);
             g.DrawStringWithShadow(subHeader, font11, Color.FromArgb(185, Color.Red), new PointF(x + 8f, font16Height + 0.5f));
             g.DrawStringWithShadow(subHeader, font11, Color.FromArgb(185, Color.White), new PointF(x + 7f, font16Height));
             font11.Dispose();
@@ -109,7 +109,7 @@ public sealed class StartScreenOverlay : AbstractOverlay
 
         _slider = new CachedBitmap(SliderWidth, Height, g =>
         {
-            RectangleF rect = new(0, 0, SliderWidth, Height / 1.6f);
+            RectangleF rect = new(0, 0, SliderWidth, Height / 1.2f);
             using GraphicsPath gradientPath = new();
             gradientPath.AddEllipse(rect);
             using PathGradientBrush pthGrBrush = new(gradientPath);
