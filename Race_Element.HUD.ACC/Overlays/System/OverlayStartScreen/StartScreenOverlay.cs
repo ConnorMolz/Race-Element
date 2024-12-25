@@ -9,12 +9,10 @@ using System.Drawing.Text;
 
 namespace RaceElement.HUD.ACC.Overlays.OverlayStartScreen;
 
-#if DEBUG
 [Overlay(Name = "Start Screen",
  Description = "Shows a start screen",
  Version = 1.00,
  OverlayType = OverlayType.Pitwall)]
-#endif
 public sealed class StartScreenOverlay : AbstractOverlay
 {
     public string Version { get; init; } = "0.0.0.0";
