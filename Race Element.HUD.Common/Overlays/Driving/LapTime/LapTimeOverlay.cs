@@ -204,7 +204,65 @@ public class LapTimeOverlay : CommonAbstractOverlay
     }
     public sealed override void Render(Graphics g)
     {
+        int playerId = SimDataProvider.Session.PlayerCarIndex;
+        if (_config.InfoPanel.SectorTimes)
+        {
+            int? sector1 = SimDataProvider.Session.Cars[playerId].Value.CurrentLap.Splits[0];
+            int? bestSector1 = SimDataProvider.Session.Cars[playerId].Value.FastestLap.Splits[0];
+            _sector1Header.Draw(g,"S1", this.Scale);
+            _sector1Value.Draw(g, sector1.HasValue ? TimeSpan.FromMilliseconds(sector1.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+            
+            if(_config.InfoPanel.DeltaToBest)
+            {
+                _sector1DeltaValue.Draw(g, bestSector1.HasValue ? TimeSpan.FromMilliseconds(sector1.Value - bestSector1.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+            }        
+        }
         
+        if (_config.InfoPanel.SectorTimes)
+        {
+            int? sector2 = SimDataProvider.Session.Cars[playerId].Value.CurrentLap.Splits[1];
+            int? bestSector2 = SimDataProvider.Session.Cars[playerId].Value.FastestLap.Splits[1];
+            _sector2Header.Draw(g,"S2", this.Scale);
+            _sector2Value.Draw(g, sector2.HasValue ? TimeSpan.FromMilliseconds(sector2.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+            
+            if(_config.InfoPanel.DeltaToBest)
+            {
+                _sector2DeltaValue.Draw(g, bestSector2.HasValue ? TimeSpan.FromMilliseconds(sector2.Value - bestSector2.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+            }        
+        }
+        
+        if (_config.InfoPanel.SectorTimes)
+        {
+            int? sector3 = SimDataProvider.Session.Cars[playerId].Value.CurrentLap.Splits[2];
+            int? bestSector3 = SimDataProvider.Session.Cars[playerId].Value.FastestLap.Splits[2];
+            _sector3Header.Draw(g,"S3", this.Scale);
+            _sector3Value.Draw(g, sector3.HasValue ? TimeSpan.FromMilliseconds(sector3.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+            
+            if(_config.InfoPanel.DeltaToBest)
+            {
+                _sector3DeltaValue.Draw(g, bestSector3.HasValue ? TimeSpan.FromMilliseconds(sector3.Value - bestSector3.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+            }        
+        }
+
+        if (_config.InfoPanel.LastLapTime)
+        {
+            int? lastLap = SimDataProvider.Session.Cars[playerId].Value.LastLap.LaptimeMS;
+            int? bestLap = SimDataProvider.Session.Cars[playerId].Value.FastestLap.LaptimeMS;
+            _lastLapHeader.Draw(g,"Last", this.Scale);
+            _lastLapValue.Draw(g, lastLap.HasValue ? TimeSpan.FromMilliseconds(lastLap.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+
+            if (_config.InfoPanel.DeltaToBest)
+            {
+                _lastLapDeltaValue.Draw(g, bestLap.HasValue ? TimeSpan.FromMilliseconds(lastLap.Value - bestLap.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+            }
+        }
+
+        if (_config.InfoPanel.BestLapTime)
+        {
+            int? bestLap = SimDataProvider.Session.Cars[playerId].Value.FastestLap.LaptimeMS;
+            _bestLapHeader.Draw(g,"Best", this.Scale);
+            _bestLapValue.Draw(g, bestLap.HasValue ? TimeSpan.FromMilliseconds(bestLap.Value).ToString("mm\\:ss\\.fff") : "--:--.---", this.Scale);
+        }
     }
 
 }
