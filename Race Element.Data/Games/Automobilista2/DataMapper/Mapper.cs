@@ -110,7 +110,7 @@ internal static class Ams2Mapper
         local.Electronics.TractionControlLevel = shared.mTractionControlSetting;
         if (local.Electronics.TractionControlLevel == -1)
         {
-            local.Electronics.TractionControlActivation = 0;
+            local.Electronics.TractionControlLevel = 0;
         }
 
         local.Electronics.BrakeBias = 1 - shared.mBrakeBias;
