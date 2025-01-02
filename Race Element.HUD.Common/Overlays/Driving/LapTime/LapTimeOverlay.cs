@@ -46,7 +46,7 @@ public class LapTimeOverlay : CommonAbstractOverlay
         public sealed class BehaviorGrouping
         {
             [ToolTip("Hide Overlay in Race")]
-            public bool HideInRace { get; init; } = true;
+            public bool HideInRace { get; init; } = false;
         }
     }
 
