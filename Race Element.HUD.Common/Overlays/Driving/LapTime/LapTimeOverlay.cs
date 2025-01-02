@@ -23,9 +23,26 @@ public class LapTimeOverlay : CommonAbstractOverlay
     private sealed class LapTimeConfig : OverlayConfiguration
     {
         public LapTimeConfig() => GenericConfiguration.AllowRescale = true;
+        [ConfigGrouping("Info Panel", "Show or hide additional information in the panel.")]
+        public InfoPanelGrouping InfoPanel { get; init; } = new InfoPanelGrouping();
         
         [ConfigGrouping("Behavior", "Configure the behavior of the Lap Time Overlay.")]
         public BehaviorGrouping BehaviorPanel { get; init; } = new BehaviorGrouping();
+        
+        public sealed class InfoPanelGrouping
+        {
+            [ToolTip("Show Sector Times")]
+            public bool SectorTimes { get; init; } = true;
+            
+            [ToolTip("Show Last Lap Time")]
+            public bool LastLapTime { get; init; } = true;
+            
+            [ToolTip("Show Best Lap Time")]
+            public bool BestLapTime { get; init; } = true;
+            
+            [ToolTip("Show Deltas to best lap time")]
+            public bool DeltaToBest { get; init; } = true;
+        }
         public sealed class BehaviorGrouping
         {
             [ToolTip("Hide Overlay in Race")]
@@ -111,11 +128,70 @@ public class LapTimeOverlay : CommonAbstractOverlay
             using Pen underlinePen = new(accentColor);
             g.DrawLine(underlinePen, 0, lineHeight - 1, valueWidth, lineHeight - 1);
         });
+
+        if (_config.InfoPanel.SectorTimes)
+        {
+            _sector1Header = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
+            _sector1Value = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
+            if (_config.InfoPanel.DeltaToBest)
+            {
+                _sector1DeltaValue = new PanelText(_font, valueDeltaBackground, deltaValueRect) { StringFormat = deltaValueFormat };
+            }
+            
+            _sector2Header = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
+            _sector2Value = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
+            if (_config.InfoPanel.DeltaToBest)
+            {
+                _sector2DeltaValue = new PanelText(_font, valueDeltaBackground, deltaValueRect) { StringFormat = deltaValueFormat };
+            }
+            
+            _sector3Header = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
+            _sector3Value = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
+            if (_config.InfoPanel.DeltaToBest)
+            {
+                _sector3DeltaValue = new PanelText(_font, valueDeltaBackground, deltaValueRect) { StringFormat = deltaValueFormat };
+            }
+        }
+
+        if (_config.InfoPanel.LastLapTime)
+        {
+            _lastLapHeader = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
+            _lastLapValue = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
+            if (_config.InfoPanel.DeltaToBest)
+            {
+                _lastLapDeltaValue = new PanelText(_font, valueDeltaBackground, deltaValueRect) { StringFormat = deltaValueFormat };
+            }
+        }
+
+        if (_config.InfoPanel.BestLapTime)
+        {
+            _bestLapHeader = new PanelText(_font, headerBackground, headerRect) { StringFormat = headerFormat };
+            _bestLapValue = new PanelText(_font, valueBackground, valueRect) { StringFormat = valueFormat };
+        }
     }
 
     public sealed override void BeforeStop()
     {
+        _sector1Header?.Dispose();
+        _sector1Value?.Dispose();
+        _sector1DeltaValue?.Dispose();
         
+        _sector2Header?.Dispose();
+        _sector2Value?.Dispose();
+        _sector2DeltaValue?.Dispose();
+        
+        _sector3Header?.Dispose();
+        _sector3Value?.Dispose();
+        _sector3DeltaValue?.Dispose();
+        
+        _lastLapHeader?.Dispose();
+        _lastLapValue?.Dispose();
+        _lastLapDeltaValue?.Dispose();
+        
+        _bestLapHeader?.Dispose();
+        _bestLapValue?.Dispose();
+        
+        _font?.Dispose();
     }
     
     public override bool ShouldRender()
