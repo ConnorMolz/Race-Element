@@ -13,9 +13,9 @@ public static class StructExtension
     {
         using (var stream = file.CreateViewStream())
         {
-            stream.Read(buffer, 0, buffer.Length);
+            stream.ReadExactly(buffer);
             var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            var data = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+            var data = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
             handle.Free();
             return data;
         }
@@ -24,7 +24,7 @@ public static class StructExtension
     public static T ToStruct<T>(this TimestampedBytes timestampedBytes)
     {
         var handle = GCHandle.Alloc(timestampedBytes.RawData, GCHandleType.Pinned);
-        var data = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+        var data = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
         handle.Free();
         return data;
     }
