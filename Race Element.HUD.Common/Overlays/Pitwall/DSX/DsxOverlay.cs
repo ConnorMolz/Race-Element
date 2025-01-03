@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.DsxResources;
+using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.Resources;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
@@ -57,16 +57,20 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
     internal void SetLighting()
     {
         Debug.WriteLine("Changing RGB");
-        Packet p = new();
+
         int controllerIndex = 0;
 
-        p.instructions = new Instruction[1];  // send only 1 instruction
-        p.instructions[0].type = InstructionType.RGBUpdate;
-        p.instructions[0].parameters = [controllerIndex, 255, 69, 0];
+        DsxPacket p = new()
+        {
+            Instructions = [new() { Type = InstructionType.RGBUpdate, Parameters = [controllerIndex, 255, 69, 0] }]
+        };
 
         Send(p);
         ServerResponse lightingReponse = Receive();
-        HandleResponse(lightingReponse);
+        if (lightingReponse != null)
+        {
+            HandleResponse(lightingReponse);
+        }
     }
 
     internal void CreateEndPoint()
@@ -75,14 +79,14 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
         _endPoint = new IPEndPoint(Triggers.localhost, _config.UDP.Port);
     }
 
-    internal void Send(Packet data)
+    internal void Send(DsxPacket data)
     {
         var RequestData = Encoding.ASCII.GetBytes(Triggers.PacketToJson(data));
         _client?.Send(RequestData, RequestData.Length, _endPoint);
         _timeSent = DateTime.Now;
     }
 
-    private ServerResponse Receive()
+    private ServerResponse? Receive()
     {
         byte[] bytesReceivedFromServer = _client.Receive(ref _endPoint);
 

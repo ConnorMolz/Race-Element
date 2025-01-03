@@ -1,7 +1,7 @@
 ﻿using RaceElement.Core.Jobs.Loop;
 using RaceElement.Data.Common;
 using System;
-using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.DsxResources;
+using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.Resources;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
@@ -25,7 +25,7 @@ internal sealed class DsxJob(DsxOverlay overlay) : AbstractLoopJob
             }
         }
 
-        Packet tcPacket = TriggerHaptics.HandleAcceleration(overlay._config);
+        DsxPacket tcPacket = TriggerHaptics.HandleAcceleration(overlay._config);
         if (tcPacket != null)
         {
             overlay.Send(tcPacket);
@@ -33,7 +33,7 @@ internal sealed class DsxJob(DsxOverlay overlay) : AbstractLoopJob
             //HandleResponse(response);
         }
 
-        Packet absPacket = TriggerHaptics.HandleBraking(overlay._config);
+        DsxPacket absPacket = TriggerHaptics.HandleBraking(overlay._config);
         if (absPacket != null)
         {
             overlay.Send(absPacket);

@@ -1,16 +1,16 @@
 ﻿using RaceElement.Data.Common;
 using RaceElement.Data.Games;
 using RaceElement.Util.SystemExtensions;
-using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.DsxResources;
+using System.Diagnostics;
+using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.Resources;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
 internal static class TriggerHaptics
 {
-    public static Packet HandleBraking(DsxConfiguration config)
+    public static DsxPacket HandleBraking(DsxConfiguration config)
     {
-        Packet p = new();
-        List<Instruction> instructions = [];
+        DsxPacket p = new();
         int controllerIndex = 0;
 
         // TODO: add either an option to threshold it on brake input or based on some curve?
@@ -27,43 +27,31 @@ internal static class TriggerHaptics
                 if (slipRatioFront > config.BrakeSlip.FrontSlipThreshold || slipRatioRear > config.BrakeSlip.RearSlipThreshold)
                 {
                     float frontslipCoefecient = slipRatioFront * 4f;
-                    frontslipCoefecient.ClipMax(20);
+                    frontslipCoefecient.ClipMax(10);
 
                     float rearSlipCoefecient = slipRatioFront * 2f;
-                    rearSlipCoefecient.ClipMax(15);
+                    rearSlipCoefecient.ClipMax(7.5f);
+
 
                     float magicValue = frontslipCoefecient + rearSlipCoefecient;
+                    float percentage = magicValue * 1.0f / 17.5f;
 
-                    instructions.Add(new Instruction()
-                    {
-                        type = InstructionType.TriggerUpdate,
-                        /// Start: 0-9 Strength:0-8 Frequency:0-255
-                        //parameters = new object[] { controllerIndex, Trigger.Left, TriggerMode.AutomaticGun, 0, 6, 45 } // vibrate is not enough
-                        parameters = [controllerIndex, Trigger.Left, TriggerMode.CustomTriggerValue, CustomTriggerValueMode.VibrateResistanceB, config.BrakeSlip.Frequency /*85*/, magicValue, 0, 0, 0, 0, 0]
-                    });
+                    p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Left, TriggerMode.FEEDBACK, [1, (int)(7 * percentage)]);
+                    int freq = config.BrakeSlip.Frequency - (int)(config.BrakeSlip.Frequency * percentage);
+                    freq.ClipMin(2);
+                    p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Left, TriggerMode.VIBRATION, [0, 8, freq]);
                 }
             }
         }
 
-        if (instructions.Count == 0)
-        {
-            instructions.Add(new Instruction()
-            {
-                type = InstructionType.TriggerUpdate,
-                parameters = [controllerIndex, Trigger.Left, TriggerMode.Normal]
-            });
-        }
+        if (p.Instructions == null) p.AddAdaptiveTriggerToPacket(0, Trigger.Left, TriggerMode.Normal, []);
 
-
-        if (instructions.Count == 0) return null;
-        p.instructions = instructions.ToArray();
         return p;
     }
 
-    public static Packet HandleAcceleration(DsxConfiguration config)
+    public static DsxPacket HandleAcceleration(DsxConfiguration config)
     {
-        Packet p = new();
-        List<Instruction> instructions = [];
+        DsxPacket p = new();
         int controllerIndex = 0;
 
         if (SimDataProvider.LocalCar.Inputs.Throttle > config.ThrottleSlip.ThrottleThreshold / 100f)
@@ -77,44 +65,23 @@ internal static class TriggerHaptics
                 if (slipRatioFront > config.ThrottleSlip.FrontSlipThreshold || slipRatioRear > config.ThrottleSlip.RearSlipThreshold)
                 {
                     float frontslipCoefecient = slipRatioFront * 4;
-                    frontslipCoefecient.ClipMax(20);
-
+                    frontslipCoefecient.ClipMax(5);
                     float rearSlipCoefecient = slipRatioFront * 6f;
-                    rearSlipCoefecient.ClipMax(30);
+                    rearSlipCoefecient.ClipMax(7.5f);
 
                     float magicValue = frontslipCoefecient + rearSlipCoefecient;
+                    float percentage = magicValue * 1.0f / 12.5f;
 
-
-                    instructions.Add(new Instruction()
-                    {
-                        type = InstructionType.TriggerUpdate,
-                        parameters = [controllerIndex, Trigger.Right, TriggerMode.CustomTriggerValue, CustomTriggerValueMode.VibrateResistanceB, config.ThrottleSlip.Frequency/*130*/, magicValue, 0, 0, 0, 0, 0]
-                        /// Start: 0-9 Strength:0-8 Frequency:0-255
-                        //parameters = new object[] { controllerIndex, Trigger.Right, TriggerMode.AutomaticGun, 0, 6, 65 }
-                    });
-
-
-                    //instructions.Add(new Instruction()
-                    //{
-                    //    type = InstructionType.TriggerUpdate,
-                    //    parameters = [controllerIndex, Trigger.Right, TriggerMode.AutomaticGun, 0, magicValue, 45]
-                    //});
+                    p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Right, TriggerMode.FEEDBACK, [1, (int)(6 * percentage)]);
+                    int freq = config.ThrottleSlip.Frequency - (int)(config.ThrottleSlip.Frequency * percentage);
+                    freq.ClipMin(2);
+                    p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Right, TriggerMode.VIBRATION, [0, 8, freq]);
                 }
             }
         }
 
-        if (instructions.Count == 0)
-        {
-            instructions.Add(new Instruction()
-            {
-                type = InstructionType.TriggerUpdate,
-                parameters = [controllerIndex, Trigger.Right, TriggerMode.Normal]
-            });
-        }
+        if (p.Instructions == null) p.AddAdaptiveTriggerToPacket(0, Trigger.Right, TriggerMode.Normal, []);
 
-
-        if (instructions.Count == 0) return null;
-        p.instructions = instructions.ToArray();
         return p;
     }
 }
