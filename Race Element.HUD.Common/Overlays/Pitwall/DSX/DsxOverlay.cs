@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using RaceElement.Data.Games;
+﻿using RaceElement.Data.Games;
 using RaceElement.HUD.Overlay.Internal;
 using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.Resources;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
@@ -93,7 +93,7 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
 
         if (bytesReceivedFromServer.Length > 0)
         {
-            ServerResponse ServerResponseJson = JsonConvert.DeserializeObject<ServerResponse>($"{Encoding.ASCII.GetString(bytesReceivedFromServer, 0, bytesReceivedFromServer.Length)}");
+            ServerResponse? ServerResponseJson = JsonSerializer.Deserialize<ServerResponse>($"{Encoding.ASCII.GetString(bytesReceivedFromServer, 0, bytesReceivedFromServer.Length)}");
             return ServerResponseJson;
         }
 
