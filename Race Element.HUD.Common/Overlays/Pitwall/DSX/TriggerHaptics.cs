@@ -1,7 +1,5 @@
 ﻿using RaceElement.Data.Common;
-using RaceElement.Data.Games;
 using RaceElement.Util.SystemExtensions;
-using System.Diagnostics;
 using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.Resources;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;

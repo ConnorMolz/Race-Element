@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RaceElement.Data.Games;
 using RaceElement.HUD.Overlay.Internal;
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Net;
@@ -81,7 +80,9 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
 
     internal void Send(DsxPacket data)
     {
-        var RequestData = Encoding.ASCII.GetBytes(Triggers.PacketToJson(data));
+        string? packet = Triggers.PacketToJson(data);
+        if (packet == null) return;
+        var RequestData = Encoding.ASCII.GetBytes(packet);
         _client?.Send(RequestData, RequestData.Length, _endPoint);
         _timeSent = DateTime.Now;
     }

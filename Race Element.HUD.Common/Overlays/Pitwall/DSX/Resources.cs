@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Net;
+﻿using System.Net;
+using System.Text.Json;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
@@ -14,28 +14,14 @@ internal static class Resources
         /// </summary>
         /// <param name="packet">The Packet object to serialize.</param>
         /// <returns>A JSON string representing the Packet object.</returns>
-        public static string PacketToJson(DsxPacket packet)
-        {
-            try
-            {
-                return JsonConvert.SerializeObject(packet);
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine($"Serialization error: {ex.Message}");
-                return string.Empty;
-            }
-        }
+        public static string PacketToJson(DsxPacket packet) => JsonSerializer.Serialize(packet);
 
         /// <summary>
         /// Deserializes a JSON string into a Packet object.
         /// </summary>
         /// <param name="json">The JSON string representing a Packet.</param>
         /// <returns>A Packet object deserialized from the JSON string.</returns>
-        public static DsxPacket JsonToPacket(string json)
-        {
-            return JsonConvert.DeserializeObject<DsxPacket>(json);
-        }
+        public static DsxPacket? JsonToPacket(string json) => JsonSerializer.Deserialize<DsxPacket>(json);
     }
 
     public readonly record struct Instruction(InstructionType Type, object[] Parameters);
