@@ -33,14 +33,14 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
         AllowReposition = false;
     }
 
-    public override void BeforeStart()
+    public sealed override void BeforeStart()
     {
         if (IsPreviewing) return;
 
         _dsxJob = new DsxJob(this) { IntervalMillis = 1000 / 200 };
         _dsxJob.Run();
     }
-    public override void BeforeStop()
+    public sealed override void BeforeStop()
     {
         if (IsPreviewing) return;
 
@@ -49,9 +49,9 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
         _client?.Dispose();
     }
 
-    public override bool ShouldRender() => DefaultShouldRender() && !IsPreviewing;
+    public sealed override bool ShouldRender() => DefaultShouldRender() && !IsPreviewing;
 
-    public override void Render(Graphics g) { }
+    public sealed override void Render(Graphics g) { }
 
     internal void SetLighting()
     {
@@ -80,10 +80,12 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
 
     internal void Send(DsxPacket data)
     {
-        string? packet = Triggers.PacketToJson(data);
-        if (packet == null) return;
-        var RequestData = Encoding.ASCII.GetBytes(packet);
-        _client?.Send(RequestData, RequestData.Length, _endPoint);
+        string packet = Triggers.PacketToJson(data);
+        if (packet == null)
+            return;
+
+        var requestData = Encoding.ASCII.GetBytes(packet);
+        _client?.Send(requestData, requestData.Length, _endPoint);
         _timeSent = DateTime.Now;
     }
 

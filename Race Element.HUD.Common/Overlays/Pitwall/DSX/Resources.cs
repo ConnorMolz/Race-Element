@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
@@ -24,13 +25,25 @@ internal static class Resources
         public static DsxPacket? JsonToPacket(string json) => JsonSerializer.Deserialize<DsxPacket>(json);
     }
 
-    public readonly record struct Instruction(InstructionType Type, object[] Parameters);
-
-    public sealed class DsxPacket
+    [Serializable]
+    public readonly struct Instruction
     {
-        public Instruction[] Instructions;
+        [JsonPropertyName("type")]
+        public readonly InstructionType Type { get; init; }
+        [JsonPropertyName("parameters")]
+        public readonly object[] Parameters { get; init; }
     }
 
+    [Serializable]
+    public sealed class DsxPacket
+    {
+        [JsonPropertyName("instructions")]
+        public Instruction[] FinalInstructions { get => Instructions ?? []; }
+
+        public Instruction[]? Instructions;
+    }
+
+    [Serializable]
     public sealed class ServerResponse
     {
         public string Status;
