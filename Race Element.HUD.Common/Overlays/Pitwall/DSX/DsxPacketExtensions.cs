@@ -127,7 +127,7 @@ internal static class DsxPacketExtensions
         packet.Instructions[instCount] = new Instruction
         {
             Type = InstructionType.TriggerThreshold,
-            Parameters = new object[] { controllerIndex, trigger, threshold }
+            Parameters = [controllerIndex, trigger, threshold]
         };
 
         return packet;
@@ -162,7 +162,7 @@ internal static class DsxPacketExtensions
         packet.Instructions[instCount] = new Instruction
         {
             Type = InstructionType.RGBUpdate,
-            Parameters = new object[] { controllerIndex, red, green, blue, brightness }
+            Parameters = [controllerIndex, red, green, blue, brightness]
         };
 
         return packet;
@@ -194,7 +194,7 @@ internal static class DsxPacketExtensions
         packet.Instructions[instCount] = new Instruction
         {
             Type = InstructionType.PlayerLEDNewRevision,
-            Parameters = new object[] { controllerIndex, playerLED }
+            Parameters = [controllerIndex, playerLED]
         };
 
         return packet;
@@ -226,7 +226,7 @@ internal static class DsxPacketExtensions
         packet.Instructions[instCount] = new Instruction
         {
             Type = InstructionType.MicLED,
-            Parameters = new object[] { controllerIndex, micLED }
+            Parameters = [controllerIndex, micLED]
         };
 
         return packet;
@@ -257,7 +257,7 @@ internal static class DsxPacketExtensions
         packet.Instructions[instCount] = new Instruction
         {
             Type = InstructionType.ResetToUserSettings,
-            Parameters = new object[] { controllerIndex }
+            Parameters = [controllerIndex]
         };
 
         return packet;
@@ -287,7 +287,7 @@ internal static class DsxPacketExtensions
         packet.Instructions[instCount] = new Instruction
         {
             Type = InstructionType.GetDSXStatus,
-            Parameters = new object[] { }
+            Parameters = []
         };
 
         return packet;

@@ -7,7 +7,7 @@ internal static class Resources
 {
     public static class Triggers
     {
-        public static IPAddress localhost = new IPAddress(new byte[] { 127, 0, 0, 1 });
+        public static IPAddress localhost = new([127, 0, 0, 1]);
 
         /// <summary>
         /// Converts a Packet object to its JSON string representation.
