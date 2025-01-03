@@ -34,7 +34,7 @@ internal sealed class DsxConfiguration : OverlayConfiguration
 
         [ToolTip("Sets the frequency of the slip effect whilst applying the brakes.")]
         [IntRange(10, 150, 1)]
-        public int Frequency { get; init; } = 85;
+        public int MaxFrequency { get; init; } = 85;
 
         [FloatRange(0.05f, 6f, 0.01f, 2)]
         public float FrontSlipThreshold { get; init; } = 0.5f;
@@ -54,9 +54,9 @@ internal sealed class DsxConfiguration : OverlayConfiguration
         [FloatRange(0.1f, 99f, 0.1f, 1)]
         public float ThrottleThreshold { get; init; } = 3f;
 
-        [ToolTip("Sets the frequency of the slip effect whilst applying the throttle.")]
+        [ToolTip("Sets the max frequency of the slip effect whilst applying the throttle.")]
         [IntRange(10, 150, 1)]
-        public int Frequency { get; init; } = 85;
+        public int MaxFrequency { get; init; } = 85;
 
         [ToolTip("Decrease this treshold to increase the sensitivity when the front wheels slip (understeer).")]
         [FloatRange(0.05f, 6f, 0.01f, 2)]

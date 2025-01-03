@@ -35,9 +35,10 @@ internal static class TriggerHaptics
 
                     float magicValue = frontslipCoefecient + rearSlipCoefecient;
                     float percentage = magicValue * 1.0f / 17.5f;
+                    if (percentage >= 0.05f)
+                        p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Left, TriggerMode.FEEDBACK, [1, (int)(7 * percentage)]);
 
-                    p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Left, TriggerMode.FEEDBACK, [1, (int)(7 * percentage)]);
-                    int freq = config.BrakeSlip.Frequency - (int)(config.BrakeSlip.Frequency * percentage);
+                    int freq = config.BrakeSlip.MaxFrequency - (int)(config.BrakeSlip.MaxFrequency * percentage);
                     freq.ClipMin(2);
                     p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Left, TriggerMode.VIBRATION, [0, 8, freq]);
                 }
@@ -72,8 +73,10 @@ internal static class TriggerHaptics
                     float magicValue = frontslipCoefecient + rearSlipCoefecient;
                     float percentage = magicValue * 1.0f / 12.5f;
 
-                    p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Right, TriggerMode.FEEDBACK, [1, (int)(6 * percentage)]);
-                    int freq = config.ThrottleSlip.Frequency - (int)(config.ThrottleSlip.Frequency * percentage);
+                    if (percentage >= 0.05f)
+                        p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Right, TriggerMode.FEEDBACK, [1, (int)(6 * percentage)]);
+
+                    int freq = config.ThrottleSlip.MaxFrequency - (int)(config.ThrottleSlip.MaxFrequency * percentage);
                     freq.ClipMin(2);
                     p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Right, TriggerMode.VIBRATION, [0, 8, freq]);
                 }
