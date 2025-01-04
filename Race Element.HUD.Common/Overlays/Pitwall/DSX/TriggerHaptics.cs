@@ -37,7 +37,7 @@ internal static class TriggerHaptics
                         p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Left, TriggerMode.FEEDBACK, [1, (int)(config.BrakeSlip.FeedbackStrength * percentage)]);
 
                     int freq = (int)(config.BrakeSlip.MaxFrequency * percentage);
-                    freq.ClipMin(3);
+                    freq.ClipMin(config.BrakeSlip.MinFrequency);
                     p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Left, TriggerMode.VIBRATION, [0, config.BrakeSlip.Amplitude, freq]);
                 }
             }
@@ -75,7 +75,7 @@ internal static class TriggerHaptics
                         p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Right, TriggerMode.FEEDBACK, [1, (int)(config.ThrottleSlip.FeedbackStrength * percentage)]);
 
                     int freq = (int)(config.ThrottleSlip.MaxFrequency * percentage);
-                    freq.ClipMin(6);
+                    freq.ClipMin(config.ThrottleSlip.MinFrequency);
                     p.AddAdaptiveTriggerToPacket(controllerIndex, Trigger.Right, TriggerMode.VIBRATION, [0, config.ThrottleSlip.Amplitude, freq]);
                 }
             }

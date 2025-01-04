@@ -24,18 +24,22 @@ internal sealed class DsxConfiguration : OverlayConfiguration
         [FloatRange(0.1f, 99f, 0.1f, 1)]
         public float BrakeThreshold { get; init; } = 3f;
 
-        [FloatRange(0.05f, 6f, 0.01f, 2)]
-        public float FrontSlipThreshold { get; init; } = 0.5f;
+        [FloatRange(0.05f, 6f, 0.002f, 3)]
+        public float FrontSlipThreshold { get; init; } = 0.25f;
 
-        [FloatRange(0.05f, 6f, 0.01f, 2)]
-        public float RearSlipThreshold { get; init; } = 0.5f;
+        [FloatRange(0.05f, 6f, 0.002f, 3)]
+        public float RearSlipThreshold { get; init; } = 0.25f;
 
         [ToolTip("Higher is stronger dynamic feedback.")]
         [IntRange(5, 8, 1)]
         public int FeedbackStrength { get; init; } = 7;
 
-        [ToolTip("Sets the frequency of the slip effect whilst applying the brakes.")]
-        [IntRange(10, 150, 1)]
+        [ToolTip("Sets the min frequency of the vibration effect in the trigger.")]
+        [IntRange(1, 10, 1)]
+        public int MinFrequency { get; init; } = 3;
+
+        [ToolTip("Sets the max frequency of the vibration effect in the trigger.")]
+        [IntRange(20, 150, 1)]
         public int MaxFrequency { get; init; } = 85;
 
         [ToolTip("Change the amplitude(strength) of the vibration effect in the trigger.")]
@@ -55,19 +59,23 @@ internal sealed class DsxConfiguration : OverlayConfiguration
         public float ThrottleThreshold { get; init; } = 3f;
 
         [ToolTip("Decrease this treshold to increase the sensitivity when the front wheels slip (understeer).")]
-        [FloatRange(0.05f, 6f, 0.01f, 2)]
-        public float FrontSlipThreshold { get; init; } = 0.5f;
+        [FloatRange(0.05f, 6f, 0.002f, 3)]
+        public float FrontSlipThreshold { get; init; } = 0.35f;
 
         [ToolTip("Decrease this treshold to increase the sensitivity when the rear wheels slip (oversteer).")]
-        [FloatRange(0.05f, 10f, 0.01f, 2)]
-        public float RearSlipThreshold { get; init; } = 0.5f;
+        [FloatRange(0.05f, 10f, 0.002f, 3)]
+        public float RearSlipThreshold { get; init; } = 0.25f;
 
         [ToolTip("Higher is stronger dynamic feedback.")]
         [IntRange(5, 8, 1)]
         public int FeedbackStrength { get; init; } = 8;
 
+        [ToolTip("Sets the min frequency of the vibration effect in the trigger.")]
+        [IntRange(1, 10, 1)]
+        public int MinFrequency { get; init; } = 6;
+
         [ToolTip("Sets the max frequency of the vibration effect in the trigger.")]
-        [IntRange(10, 150, 1)]
+        [IntRange(20, 150, 1)]
         public int MaxFrequency { get; init; } = 96;
 
         [ToolTip("Change the amplitude(strength) of the vibration effect in the trigger.")]
