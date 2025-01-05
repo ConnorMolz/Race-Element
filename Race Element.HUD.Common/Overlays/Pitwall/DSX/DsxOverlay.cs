@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
-using RaceElement.Data.Games;
+﻿using RaceElement.Data.Games;
 using RaceElement.HUD.Overlay.Internal;
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.DsxResources;
+using System.Text.Json;
+using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.Resources;
 
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
@@ -34,14 +33,14 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
         AllowReposition = false;
     }
 
-    public override void BeforeStart()
+    public sealed override void BeforeStart()
     {
         if (IsPreviewing) return;
 
         _dsxJob = new DsxJob(this) { IntervalMillis = 1000 / 200 };
         _dsxJob.Run();
     }
-    public override void BeforeStop()
+    public sealed override void BeforeStop()
     {
         if (IsPreviewing) return;
 
@@ -50,23 +49,27 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
         _client?.Dispose();
     }
 
-    public override bool ShouldRender() => DefaultShouldRender() && !IsPreviewing;
+    public sealed override bool ShouldRender() => DefaultShouldRender() && !IsPreviewing;
 
-    public override void Render(Graphics g) { }
+    public sealed override void Render(Graphics g) { }
 
     internal void SetLighting()
     {
         Debug.WriteLine("Changing RGB");
-        Packet p = new();
+
         int controllerIndex = 0;
 
-        p.instructions = new Instruction[1];  // send only 1 instruction
-        p.instructions[0].type = InstructionType.RGBUpdate;
-        p.instructions[0].parameters = [controllerIndex, 255, 69, 0];
+        DsxPacket p = new()
+        {
+            Instructions = [new() { Type = InstructionType.RGBUpdate, Parameters = [controllerIndex, 255, 69, 0] }]
+        };
 
         Send(p);
         ServerResponse lightingReponse = Receive();
-        HandleResponse(lightingReponse);
+        if (lightingReponse != null)
+        {
+            HandleResponse(lightingReponse);
+        }
     }
 
     internal void CreateEndPoint()
@@ -75,20 +78,24 @@ internal sealed class DsxOverlay : CommonAbstractOverlay
         _endPoint = new IPEndPoint(Triggers.localhost, _config.UDP.Port);
     }
 
-    internal void Send(Packet data)
+    internal void Send(DsxPacket data)
     {
-        var RequestData = Encoding.ASCII.GetBytes(Triggers.PacketToJson(data));
-        _client?.Send(RequestData, RequestData.Length, _endPoint);
+        string packet = Triggers.PacketToJson(data);
+        if (packet == null)
+            return;
+
+        var requestData = Encoding.ASCII.GetBytes(packet);
+        _client?.Send(requestData, requestData.Length, _endPoint);
         _timeSent = DateTime.Now;
     }
 
-    private ServerResponse Receive()
+    private ServerResponse? Receive()
     {
         byte[] bytesReceivedFromServer = _client.Receive(ref _endPoint);
 
         if (bytesReceivedFromServer.Length > 0)
         {
-            ServerResponse ServerResponseJson = JsonConvert.DeserializeObject<ServerResponse>($"{Encoding.ASCII.GetString(bytesReceivedFromServer, 0, bytesReceivedFromServer.Length)}");
+            ServerResponse? ServerResponseJson = JsonSerializer.Deserialize<ServerResponse>($"{Encoding.ASCII.GetString(bytesReceivedFromServer, 0, bytesReceivedFromServer.Length)}");
             return ServerResponseJson;
         }
 
