@@ -11,7 +11,7 @@ using static RaceElement.HUD.Common.Overlays.Pitwall.DSX.Resources;
 namespace RaceElement.HUD.Common.Overlays.Pitwall.DSX;
 
 [Overlay(Name = "DSX",
-    Description = "Adds active triggers for the DualSense 5 controller using DSX on steam.\n See Guide in the Discord of Race Element for instructions.",
+    Description = "Adds active triggers for the DualSense Controller using DSX on steam.\n See Guide in the Discord of Race Element for instructions.",
     OverlayCategory = OverlayCategory.Inputs,
     OverlayType = OverlayType.Pitwall,
     Game = Game.RaceRoom | Game.AssettoCorsa1,
