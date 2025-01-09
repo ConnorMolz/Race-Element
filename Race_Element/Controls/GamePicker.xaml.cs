@@ -44,7 +44,7 @@ public partial class GamePicker : UserControl
 
     private void GamePicker_Loaded(object sender, RoutedEventArgs e)
     {
-        comboGamePicker.Items.Clear();
+        comboGamePicker.ItemsSource = null;
 
         List<GamePickerModel> availableGames = new();
 
