@@ -102,7 +102,7 @@ public sealed class FontUtil
 
                     // Now do the managed font
                     IntPtr pbyt = Marshal.AllocCoTaskMem(rgbyt.Length);
-                    if (null != pbyt)
+                    if (pbyt != IntPtr.Zero)
                     {
                         Marshal.Copy(rgbyt, 0, pbyt, rgbyt.Length);
                         m_pfc ??= new PrivateFontCollection();

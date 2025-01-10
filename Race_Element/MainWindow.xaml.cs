@@ -441,6 +441,7 @@ public partial class MainWindow : Window
                             ShowInTaskbar = true;
                             break;
                         }
+                    default: break;
                 }
             });
         }
