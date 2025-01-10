@@ -15,12 +15,14 @@ public abstract class AbstractSettingsJson<T>
     public abstract T Default();
     public abstract string Path { get; }
     public abstract string FileName { get; }
-    private FileInfo SettingsFile => new(Path + FileName);
+
+    private readonly FileInfo _settingsFile;
 
     public static T Cached { get; private set; }
 
     protected AbstractSettingsJson()
     {
+        _settingsFile = new(Path + FileName);
         Cached = Get(false);
     }
 
@@ -29,12 +31,12 @@ public abstract class AbstractSettingsJson<T>
         if (cached && Cached != null)
             return Cached;
 
-        if (!SettingsFile.Exists)
+        if (!_settingsFile.Exists)
             return Default();
 
         try
         {
-            using FileStream fileStream = SettingsFile.OpenRead();
+            using FileStream fileStream = _settingsFile.OpenRead();
             Cached = ReadJson(fileStream);
             return Cached;
         }
@@ -52,7 +54,7 @@ public abstract class AbstractSettingsJson<T>
         {
             string jsonString = JsonConvert.SerializeObject(genericJson, Formatting.Indented);
 
-            if (!SettingsFile.Exists && !Directory.Exists(Path))
+            if (!_settingsFile.Exists && !Directory.Exists(Path))
                 Directory.CreateDirectory(Path);
 
             File.WriteAllText(Path + "\\" + FileName, jsonString);
@@ -97,8 +99,8 @@ public abstract class AbstractSettingsJson<T>
     {
         try
         {
-            if (SettingsFile.Exists)
-                SettingsFile.Delete();
+            if (_settingsFile.Exists)
+                _settingsFile.Delete();
         }
         catch (Exception e)
         {
