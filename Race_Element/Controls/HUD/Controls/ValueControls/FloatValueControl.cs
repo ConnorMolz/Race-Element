@@ -177,7 +177,7 @@ internal sealed class FloatValueControl : IValueControl<float>
 
     /// <summary>
     /// Checks whether the textbox string after successful parsing is within the provided Integer range and tries to match it with the provided <see cref="_floatRange"/>.
-    /// if no match was found, 
+    /// If no value was found <paramref name="value"/>will be 0;
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
